@@ -34,6 +34,10 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath opcache intl zip
 RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg
 RUN docker-php-ext-install -j$(nproc) gd zip
 
+# Install Xdebug
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions xdebug
+COPY ./xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
